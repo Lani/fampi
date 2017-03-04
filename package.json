@@ -1,0 +1,27 @@
+{
+  "name": "fampi",
+  "version": "0.0.0",
+  "description": "work in progress - learning js/node with a goal in mind",
+  "main": "lib/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --exec babel-node lib/server.js",
+    "build": "npm run clean && babel -d ./dist . --ignore ./node_modules,./dist",
+    "clean": "rimraf dist"
+  },
+  "author": "Niklas Lagergren",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/lani/fampi.git"    
+  },
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "babel-cli": "^6.23.0",
+    "babel-preset-env": "^1.2.0",
+    "nodemon": "^1.11.0",
+    "rimraf": "^2.6.1"
+  },
+  "dependencies": {
+    "express": "^4.15.0"
+  }
+}
