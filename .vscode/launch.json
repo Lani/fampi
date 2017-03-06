@@ -9,14 +9,15 @@
             "request": "launch",
             "name": "Windows: babel",
             "runtimeExecutable": "${workspaceRoot}\\node_modules\\.bin\\babel-node.cmd",
-            "program": "${workspaceRoot}\\lib\\server.js",
-            "sourceMaps": true
+            "program": "${workspaceRoot}\\index.js",
+            "sourceMaps": true,
+            "protocol": "auto"
         },
         {
             "type": "node",
             "request": "launch",
             "name": "Windows: nodemon",
-            "program": "${workspaceRoot}\\lib\\server.js",
+            "program": "${workspaceRoot}\\index.js",
             "runtimeExecutable": "${workspaceRoot}\\node_modules\\.bin\\nodemon.cmd",
             "runtimeArgs": [
                 "--exec", ".\\node_modules\\.bin\\babel-node.cmd", "--nolazy"
@@ -32,14 +33,14 @@
             "request": "launch",
             "name": "Nix: babel",
             "runtimeExecutable": "${workspaceRoot}\\node_modules\\.bin\\babel-node",
-            "program": "${workspaceRoot}\\lib\\server.js",
+            "program": "${workspaceRoot}\\index.js",
             "sourceMaps": true
         },
         {
             "type": "node",
             "request": "launch",
             "name": "Nix: nodemon",
-            "program": "${workspaceRoot}\\lib\\server.js",
+            "program": "${workspaceRoot}\\index.js",
             "runtimeExecutable": "${workspaceRoot}\\node_modules\\.bin\\nodemon",
             "runtimeArgs": [
                 "--exec", ".\\node_modules\\.bin\\babel-node"
