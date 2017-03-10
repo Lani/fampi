@@ -1,0 +1,12 @@
+{
+    "javascript.validate.enable": false,
+    "standard.options": {
+        "ignore": [
+            "node_modules/**",
+            "dist/**"
+        ],
+        "parser": "babel-eslint"            
+    },
+    "standard.autoFixOnSave": true,
+    "vsicons.presets.angular": false
+  }
