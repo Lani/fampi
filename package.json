@@ -5,7 +5,7 @@
   "main": "lib/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --exec babel-node lib/server.js",
+    "start": "cross-env NODE_PATH=./src nodemon --exec babel-node ./src/server/index.js",
     "build": "npm run clean && babel -d ./dist . --ignore ./node_modules,./dist",
     "clean": "rimraf dist",
     "llc": "license-compatibility-checker | grep -v \" - compatible with GPL-3.0\""
@@ -18,12 +18,14 @@
   "license": "GPL-3.0",
   "devDependencies": {
     "babel-cli": "^6.23.0",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-env": "^1.2.0",
     "license-compatibility-checker": "^0.3.1",
     "nodemon": "^1.11.0",
     "rimraf": "^2.6.1"
   },
   "dependencies": {
+    "cross-env": "^3.2.3",
     "express": "^4.15.0"
   }
 }
