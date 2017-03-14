@@ -5,8 +5,13 @@
             "node_modules/**",
             "dist/**"
         ],
-        "parser": "babel-eslint"            
+        "parser": "babel-eslint"           
     },
     "standard.autoFixOnSave": true,
-    "vsicons.presets.angular": false
+    "TodoParser": {
+        "include": ["js"],
+        "folderExclude": ["node_modules", ".vscode"],
+        "markers": ["TODO:"],
+        "autoDefaultMarkers": true
+    }
   }
