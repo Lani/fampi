@@ -2,6 +2,6 @@
 export default {
   log: {
     level: 'debug',
-    morganFormat: 'combined'
+    morganFormat: 'dev'
   }
 }

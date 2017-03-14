@@ -1,4 +1,4 @@
-// Universal logger, inspired by https://github.com/DispatchMe/logstar
+// logger, inspired by https://github.com/DispatchMe/logstar
 
 import winston from 'winston'
 import _ from 'lodash'
@@ -6,7 +6,6 @@ import config from 'config'
 import path from 'path'
 import { argumentsToString } from './format'
 import Moment from 'moment'
-import stripAnsi from 'strip-ansi'
 
 winston.emitErrs = true
 
@@ -29,7 +28,6 @@ const winstonInstance = new winston.Logger({
       colorize: true
     })
   ],
-  filters: [(level, msg, meta) => stripAnsi(msg)],
   exitOnError: false
 })
 

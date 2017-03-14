@@ -1,9 +1,7 @@
-import _ from 'lodash'
+import path from 'path'
 import fs from 'fs'
-
 import defaults from './default.js'
 
-const path = `./${process.env.NODE_ENV || 'development'}.js`
-const config = fs.existsSync(path) ? require(path) : {}
-
-export default _.merge({}, defaults, config)
+const configPath = path.resolve(__dirname, `${defaults.environment}.js`)
+const config = fs.existsSync(configPath) ? require(configPath).default : {}
+export default Object.assign({}, defaults, config)
