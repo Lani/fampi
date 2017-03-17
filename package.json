@@ -5,10 +5,11 @@
   "main": "lib/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cross-env NODE_PATH=./src nodemon --exec babel-node ./src/server/index.js",
+    "start": "cross-env NODE_PATH=./src:./src/lib nodemon --exec node -r ./scripts/preload.js ./src/index.js",
     "build": "npm run clean && babel -d ./dist . --ignore ./node_modules,./dist",
     "clean": "rimraf dist",
-    "llc": "license-compatibility-checker | grep -v \" - compatible with GPL-3.0\""
+    "llc": "license-compatibility-checker | grep -v \" - compatible with GPL-3.0\"",
+    "migrate": "node -r ./scripts/preload.js ./scripts/migrate.js "
   },
   "author": "Niklas Lagergren",
   "repository": {
@@ -21,18 +22,25 @@
     "babel-eslint": "^7.1.1",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-env": "^1.2.0",
+    "babel-register": "^6.24.0",
     "license-compatibility-checker": "^0.3.1",
     "nodemon": "^1.11.0",
     "rimraf": "^2.6.1",
     "standard": "^9.0.1"
   },
   "dependencies": {
+    "body-parser": "^1.17.1",
     "cross-env": "^3.2.3",
     "dotenv": "^4.0.0",
-    "express": "^4.15.0",
+    "express": "^4.15.2",
+    "jsonwebtoken": "^7.3.0",
     "lodash": "^4.17.4",
     "moment": "^2.17.1",
     "morgan": "^1.8.1",
+    "passport": "^0.3.2",
+    "passport-jwt": "^2.2.1",
+    "pg-promise": "^5.6.4",
+    "sql-migrations": "^1.0.0",
     "winston": "^2.3.1"
   }
 }

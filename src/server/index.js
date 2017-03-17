@@ -1,5 +1,3 @@
-import dotenv from 'dotenv'
-dotenv.config({ silent: true })
 
 import express from 'express'
 import log from 'lib/log'

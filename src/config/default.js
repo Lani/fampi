@@ -15,5 +15,12 @@ export default {
   server: {
     port: process.env.NODE_PORT || 3001,
     host: process.env.NODE_HOST || '0.0.0.0'
+  },
+  database: {
+    host: process.env.DB_HOST || 'localhost',
+    port: process.env.DB_PORT || 5433,
+    database: process.env.DB_NAME || 'fampi',
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS
   }
 }
