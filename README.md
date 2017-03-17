@@ -15,7 +15,7 @@ DB_HOST=localhost
 DB_PORT=5433
 DB_NAME=fampi-dev
 ```
-4. Run: `npm migrate migrate`
+4. Run: `npm run migrate migrate`
 5. Run: `npm start`
 
 ## Migrations
