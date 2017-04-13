@@ -22,5 +22,8 @@ export default {
     database: process.env.DB_NAME || 'fampi',
     user: process.env.DB_USER,
     password: process.env.DB_PASS
+  },
+  authentication: {
+    sessionKey: process.env.AUTH_SESSION_KEY // 'must be overidden in .env!!'
   }
 }

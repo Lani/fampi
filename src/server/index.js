@@ -1,34 +1,33 @@
 
 import express from 'express'
-import log from 'lib/log'
+import log from 'log'
 import config from 'config'
 import morgan from 'morgan'
 import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
 
 import userRoutes from './users/userRoutes'
+import authRoutes from './auth/authRoutes'
+import auth from './auth/index'
+import respondMiddleware from './base/respondMiddleware'
 
 const app = express()
 
 app.use(morgan(config.log.morganFormat, {'stream': {write: message => log.info(message.trim())}}))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(cookieParser())
+app.use(respondMiddleware())
+app.use(auth.initialize())
 
 app.use('/users', userRoutes)
+app.use('/auth', authRoutes)
 
-app.get('*', (req, res) => res.status(200).send({
-  message: 'There`s nothing to see here, move along.'
-}))
+app.get('*', (req, res) => res.respond.success('message', 'There`s nothing to see here, move along.'))
 
 // Generic server errors (e.g. not caught by components)
 app.use((err, req, res, next) => {  // eslint-disable-line no-unused-vars
-  log.error('Error on request ', req.method, req.url)
-  log.error(err.stack)
-
-  let message = 'Oh no! We were overrun by goblins!'
-  if (config.development) {
-    message += '<p>' + err.stack.replace('\n', '<br>')
-  }
-  res.status(500).send(message)
+  res.respond.error(err)
 })
 
 app.listen(config.server.port, config.server.host, (err) => {

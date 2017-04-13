@@ -39,16 +39,19 @@
             "type": "node",
             "request": "launch",
             "name": "Nix: nodemon",
-            "program": "${workspaceRoot}\\lib\\server.js",
-            "runtimeExecutable": "${workspaceRoot}\\node_modules\\.bin\\nodemon",
+            "program": "${workspaceRoot}/src/server/index.js",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/nodemon",
             "runtimeArgs": [
-                "--exec", ".\\node_modules\\.bin\\babel-node"
+                "--exec", "node -r ./scripts/preload.js"
             ],
             "cwd": "${workspaceRoot}",
             "console": "internalConsole",
             "internalConsoleOptions": "openOnFirstSessionStart",
             "sourceMaps": true,
-            "restart": true
+            "restart": true,
+            "env": {
+                "NODE_PATH":"./src:./src/lib"
+            }
         },
         {
             "type": "node",
