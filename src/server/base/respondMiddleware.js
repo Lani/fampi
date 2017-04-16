@@ -1,8 +1,8 @@
 import log from 'log'
 import config from 'config'
 
-class Responder {
-  constructor (res, req) {
+export class Responder {
+  constructor (req, res) {
     this.res = res
     this.req = req
   }
@@ -21,54 +21,60 @@ class Responder {
     }
   }
 
-  send (reason, data) {
-    this.res.status(reason).json(data)
+  sendJson (reason, data) {
+    return this.res.status(reason).json(data)
   }
 
   noContent () {
-    this.res.sendStatus(this.reasons.noContent)
+    return this.res.sendStatus(this.reasons.noContent)
   }
 
-  success (prefix, data) {
-    this.send(this.reasons.success, { [prefix]: data })
+  success (data) {
+    return this.sendJson(this.reasons.success, data)
   }
 
-  notFound (message) {
-    this.send(this.reasons.notFound, { error: { message: message } })
+  notFound (message = 'resource not found') {
+    return this.sendJson(this.reasons.notFound, { error: { message: message } })
   }
 
   badRequest (message) {
-    log.debug('Bad request ', this.req.method, this.req.originalUrl, message)
-    this.send(this.reasons.badRequest, { error: { message: message } })
+    log.debug('Bad request', this.req.method, this.req.originalUrl, message)
+    return this.sendJson(this.reasons.badRequest, { error: { message: message } })
   }
 
   unauthorized (err) {
-    log.debug('Error on request ', this.req.method, this.req.originalUrl)
-    if (err.stack) log.debug(err.stack)
-    if (err.message) log.debug(err.message)
-    else log.debug(err)
+    let message = err.message ? err.message : err
+    log.debug('Unauthorized', this.req.method, this.req.originalUrl, message)
+    if (message !== err) log.debug(err)
 
-    const error = { message: err.message ? err.message : err }
-    if (config.development) {
+    const error = { message: message }
+    if (config.development && message !== err) {
       error.debug = err
     }
-    this.send(this.reasons.unauthorized, { error: error })
+    this.sendJson(this.reasons.unauthorized, { error: error })
   }
 
   error (err) {
-    log.error('Error on request ', this.req.method, this.req.originalUrl)
-    log.error(err.message)
-    log.error(err.stack)
+    try {
+      log.error('Error on request', this.req.method, this.req.originalUrl, err.message)
+      log.error(err.stack)
 
-    const error = { message: err.message }
-    if (config.development) {
-      error.debug = err
+      const error = {
+        message: err.message
+      }
+      if (config.development) {
+        error.stack = err.stack.split('\n')
+        error.errors = err.errors
+      }
+      this.sendJson(err.responseCode || this.reasons.internalServerError, { error: error })
+    } catch (e) {
+      this.res.status(500).send(e)
+      log.error('Error processing error', e)
     }
-    this.send(this.reasons.internalServerError, { error: error })
   }
 }
 
 export default () => (req, res, next) => {
-  res.respond = new Responder(res, req)
+  res.respond = new Responder(req, res)
   next()
 }

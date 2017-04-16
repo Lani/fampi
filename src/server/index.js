@@ -6,10 +6,9 @@ import morgan from 'morgan'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 
-import userRoutes from './users/userRoutes'
-import authRoutes from './auth/authRoutes'
 import auth from './auth/index'
 import respondMiddleware from './base/respondMiddleware'
+import restful from 'restful'
 
 const app = express()
 
@@ -20,8 +19,9 @@ app.use(cookieParser())
 app.use(respondMiddleware())
 app.use(auth.initialize())
 
-app.use('/users', userRoutes)
-app.use('/auth', authRoutes)
+restful.configure(app, {
+  dirname: __dirname
+})
 
 app.get('*', (req, res) => res.respond.success('message', 'There`s nothing to see here, move along.'))
 

@@ -46,3 +46,9 @@ https://github.com/mench/dependency-injection-es6
 Outdated docs? Not much activity. 
 https://github.com/mariocasciaro/scatter
 
+# Performance
+## Non-enumerable instance properties are slow 
+This also applies to WeakMap and properties with a Symbol key.
+* https://bugs.chromium.org/p/v8/issues/detail?id=3649
+* https://www.nczonline.net/blog/2015/11/performance-implication-object-defineproperty/
+

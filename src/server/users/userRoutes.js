@@ -1,20 +1,19 @@
-import {Router} from 'express'
 import User from './userModel'
-import wrap from 'wrap'
 import auth from 'server/auth'
+import { rest, middleware } from 'restful'
 
-const router = new Router()
+@rest('/users2')
+@middleware(auth.loginRequired)
+export class UserRoutes2 {
+  async get () {
+    return { users: await User.all() }
+  }
 
-router.get('/', auth.loginRequired, wrap(async (req, res) => {
-  res.respond.success('users', await User.all())
-}))
+  async getId (id) {
+    return { user: await User.getById(parseInt(id)) }
+  }
 
-router.get('/:id', auth.loginRequired, wrap(async (req, res) => {
-  res.respond.success('user', await User.getById(parseInt(req.params.id)))
-}))
-
-router.post('/', auth.loginRequired, wrap(async (req, res) => {
-  res.respond.success('user', await User.create(req.body))
-}))
-
-export default router
+  async post (req) {
+    return { user: await User.create(req.body) }
+  }
+}
