@@ -14,7 +14,7 @@ Will currently use in memory session, later store them in the database. As this 
 * http://cryto.net/~joepie91/blog/2016/06/13/stop-using-jwt-for-sessions/
 
 ## Todo
-* Implement [helmet]https://helmetjs.github.io/docs/
+* Implement [helmet](https://helmetjs.github.io/docs/)
 
 # Validation
 ### ecmamodel
