@@ -2,9 +2,9 @@ import User from './userModel'
 import auth from 'server/auth'
 import { rest, middleware } from 'restful'
 
-@rest('/users2')
+@rest('/users')
 @middleware(auth.loginRequired)
-export class UserRoutes2 {
+export class UserRoutes {
   async get () {
     return { users: await User.all() }
   }

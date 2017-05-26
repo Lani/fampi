@@ -1,4 +1,3 @@
-
 import express from 'express'
 import log from 'log'
 import config from 'config'
@@ -12,7 +11,7 @@ import restful from 'restful'
 
 const app = express()
 
-app.use(morgan(config.log.morganFormat, {'stream': {write: message => log.info(message.trim())}}))
+app.use(morgan(config.log.morganFormat, { stream: { write: message => log.info(message.trim()) } }))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
@@ -23,14 +22,15 @@ restful.configure(app, {
   dirname: __dirname
 })
 
-app.get('*', (req, res) => res.respond.success('message', 'There`s nothing to see here, move along.'))
+app.get('*', (req, res) => res.respond.notFound())
 
 // Generic server errors (e.g. not caught by components)
-app.use((err, req, res, next) => {  // eslint-disable-line no-unused-vars
+app.use((err, req, res, next) => {
+  // eslint-disable-line no-unused-vars
   res.respond.error(err)
 })
 
-app.listen(config.server.port, config.server.host, (err) => {
+app.listen(config.server.port, config.server.host, err => {
   if (err) {
     log.error(err)
     return
