@@ -1,5 +1,9 @@
 Notes
 =====
+# REST
+* http://www.restapitutorial.com/lessons/httpmethods.html
+* https://medium.com/@schneidenbach/restful-api-best-practices-and-common-pitfalls-7a83ba3763b5
+* https://medium.com/@zurfyx/building-a-scalable-node-js-express-app-1be1a7134cfd
 
 # Markdown
 I really need to learn this. Some resources that could help on that:
