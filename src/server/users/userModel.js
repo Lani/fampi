@@ -1,4 +1,3 @@
-import pgp from 'pg-promise'
 import DuplicateResourceError from 'errors/duplicateResourceError'
 import NoResultError from 'errors/noResultError'
 import db from 'lib/db'
@@ -10,14 +9,11 @@ export default class UserModel {
   }
 
   static async getById (id) {
-    try {
-      return await db.one('select id, email, username from users where id=$1', id)
-    } catch (ex) {
-      if (ex.result && ex.result.rowCount === 0) {
-        throw new NoResultError('User not found')
-      }
-      throw ex
+    let user = await db.oneOrNone('select id, email, username from users where id=$1', id)
+    if (!user) {
+      throw new NoResultError('User not found')
     }
+    return user
   }
 
   static async getByEmail (email) {
