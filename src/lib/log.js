@@ -6,8 +6,24 @@ import config from 'config'
 import path from 'path'
 import { argumentsToString } from './format'
 import Moment from 'moment'
+import winstonCommon from 'winston/lib/winston/common'
 
 winston.emitErrs = true
+
+// Override to use real console.log etc for VSCode debugger
+winston.transports.Console.prototype.log = function (level, message, meta, callback) {
+  const output = winstonCommon.log(
+    Object.assign({}, this, {
+      level,
+      message,
+      meta
+    })
+  )
+
+  console[level in console ? level : 'log'](output)
+
+  setImmediate(callback, null, true)
+}
 
 const winstonInstance = new winston.Logger({
   transports: [
@@ -19,7 +35,7 @@ const winstonInstance = new winston.Logger({
       maxsize: 104857600, // 100 MB
       maxFiles: 14,
       colorize: false,
-      timestamp: () => (new Moment()).format('YYYY-MM-DD HH:mm:ss.SSSS')
+      timestamp: () => new Moment().format('YYYY-MM-DD HH:mm:ss.SSSS')
     }),
     new winston.transports.Console({
       level: config.log.level,
@@ -31,11 +47,17 @@ const winstonInstance = new winston.Logger({
   exitOnError: false
 })
 
-winstonInstance.isLevelEnabled = (level) => {
-  return _.any(this.transports, function (transport) {
-    return (transport.level && this.levels[transport.level] <= this.levels[level]) ||
-      (!transport.level && this.levels[this.level] <= this.levels[level])
-  }, this)
+winstonInstance.isLevelEnabled = level => {
+  return _.any(
+    this.transports,
+    function (transport) {
+      return (
+        (transport.level && this.levels[transport.level] <= this.levels[level]) ||
+        (!transport.level && this.levels[this.level] <= this.levels[level])
+      )
+    },
+    this
+  )
 }
 
 function log (level, ...args) {

@@ -1,15 +1,19 @@
 {
   "presets": [
-    ["env", {
-      "targets": {
-        "node": "current"
+    [
+      "env",
+      {
+        "targets": {
+          "node": "current"
+        }
       }
-    }]
+    ]
   ],
   "plugins": [
     "transform-decorators-legacy",
+    "transform-class-properties",
     "transform-object-rest-spread"
   ],
-  "sourceMaps": "inline",
+  "sourceMaps": "both",
   "retainLines": true
 }

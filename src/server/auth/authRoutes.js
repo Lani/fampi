@@ -1,19 +1,17 @@
 import passport from './index'
-import userModel from '../users/userModel'
+import userFacade from '../users/userFacade'
 import { rest } from 'restful'
 
 @rest('/auth/session')
 export class AuthSessionRouter {
   post (req, res, next) {
     passport.authenticate((err, user, info) => {
-      if (err) res.error(err)
-      if (!user) res.respond.notFound('User not found')
-      if (user) {
-        req.logIn(user, function (err) {
-          if (err) res.error(err)
-          res.respond.success({ user: user })
-        })
-      }
+      if (err) return res.respond.error(err)
+      if (!user) return res.respond.notFound('User not found')
+      req.logIn(user, function (err) {
+        if (err) res.respond.error(err)
+        res.respond.success({ user: user })
+      })
     })(req, res, next)
   }
 
@@ -26,7 +24,7 @@ export class AuthSessionRouter {
 @rest('/auth/register')
 export class AuthRegisterRouter {
   async post (req, res, next) {
-    await userModel.create(req.body)
+    await userFacade.create(req.body)
     passport.authenticate((err, user, info) => {
       if (user) res.respond.success({ user: user })
       if (err) res.respond.unauthorized(err)

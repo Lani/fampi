@@ -1,4 +1,4 @@
-import User from './userModel'
+import User from './userFacade'
 import auth from 'server/auth'
 import { rest, middleware } from 'restful'
 
