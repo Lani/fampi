@@ -1,18 +1,12 @@
-/*
-import DuplicateResourceError from 'errors/duplicateResourceError'
-import NoResultError from 'errors/noResultError'
-import db from 'lib/db'
-import crypt from 'server/auth/crypt'
-*/
-import { field } from 'model/field'
+import { field, types as t } from 'model/field'
 
 export default class UserModel {
-  @field('string', 'required', 'maxLength:50')
+  @field(t.string, 'required', 'maxLength:50')
   username = null
 
-  @field('email', 'required', 'maxLength:254', 'email')
+  @field(t.email, 'required', 'maxLength:254', 'email')
   email = null
 
-  @field('password', 'required')
+  @field(t.password, 'required')
   password = null
 }

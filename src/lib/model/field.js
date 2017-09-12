@@ -1,8 +1,8 @@
-const fieldsProperty = '__fields__' // Using a string could collide, but is faster than a Symbol.
-import ValidationError from 'errors/validationError'
-import getClassName from 'utils/getClassName'
-import Checkit from 'checkit'
-
+// import ValidationError from 'errors/validationError'
+// import getClassName from 'utils/getClassName'
+// import Checkit from 'checkit'
+import Model, { validationsProperty, fieldsProperty, types } from './model'
+/*
 async function validate (fieldName) {
   let fields = this[fieldsProperty]
   if (!fields) {
@@ -25,6 +25,7 @@ async function validate (fieldName) {
   }
   // validateObject(this, validations)
 }
+*/
 /*
 function validateObject (object, validations) {
   const objectErrors = {}
@@ -69,14 +70,56 @@ function verifyInt (val) {
   }
 }
 */
+
+/**
+* @function field Defines a field on the model.
+* @param  {string} type The field type. @see ./types for supported types.
+* @param  {arguments} ...args Validation rules. @see {@link https://github.com/tgriesser/checkit} for supported validation rules.
+* @return {function} The field descriptor implementation applied when the model is parsed.
+*/
 export function field (type, ...args) {
   return (target, key, descriptor) => {
-    let fields = target[fieldsProperty]
-    if (!fields) {
-      fields = target[fieldsProperty] = { fields: {}, validations: {} }
-      target.validate = validate
-    }
-    fields.fields[key] = { type: type }
-    fields.validations[key] = args
+    addField(target, key, type, ...args)
   }
+}
+
+//  let validations = args || ['required', 'matchesField:passwordConfirmation', 'minLength:8', 'maxLength:50']
+
+/**
+* @function blacklist Blacklist a field/property from being returned when serialized to Json.
+*/
+export function blacklist () {
+  return (target, key, descriptor) => {
+    blacklistField(target, key)
+  }
+}
+
+/**
+* @function instanceOnly Not stored in the database.
+*/
+export function instanceOnly () {
+  return (target, key, descriptor) => {
+    instanceOnlyField(target, key)
+  }
+}
+
+function addField (target, key, type, ...args) {
+  if (!(target instanceof Model)) {
+    throw new Error('The field decorator can only be applied on the Model class.')
+  }
+  let field = (getField(target, key).type = type)
+  target[validationsProperty][key] = args
+  return field
+}
+
+function blacklistField (target, key) {
+  getField(target, key).isBlacklisted = true
+}
+
+function instanceOnlyField (target, key) {
+  getField(target, key).isInstanceOnly = true
+}
+
+function getField (target, key) {
+  return (target[fieldsProperty][key] = target[fieldsProperty][key] || {})
 }

@@ -1,9 +1,11 @@
-import DuplicateResourceError from 'errors/duplicateResourceError'
+import ValidationError from 'errors/validationError'
 import NoResultError from 'errors/noResultError'
 import db from 'lib/db'
 import crypt from 'server/auth/crypt'
 import convertToClass from 'lib/utils/convertToClass'
 import UserModel from 'server/users/userModel'
+
+const duplicateKeyRegex = /^Key \((\w*)\).*$/
 
 export default class UserFacade {
   static async all () {
@@ -32,8 +34,12 @@ export default class UserFacade {
         { email: user.email, username: user.username, password_digest: digest }
       )
     } catch (ex) {
-      if (ex.constraint === 'users_email_key') {
-        throw new DuplicateResourceError(`The email ${user.email} is already registered.`)
+      if (ex.message.startsWith('duplicate key value violates unique constraint')) {
+        let match = duplicateKeyRegex.exec(ex.detail)
+        if (!match) {
+          throw new ValidationError('Validation error', { '': ex.detail }, ex)
+        }
+        throw new ValidationError('Validation error', { [match[1]]: 'Does already exists.' })
       }
       throw ex
     }
